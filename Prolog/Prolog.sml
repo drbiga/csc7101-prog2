@@ -149,7 +149,7 @@ fun Solve (goals: Term list, db: HornClause list) =
               S'
             )
             | Fun (p, args) => (
-                S'
+              S'
             )
         end
       
@@ -173,18 +173,29 @@ fun OutQuery (goals: Term list, db: HornClause list) =
   let
     val S = Solve (goals, db)
     val bindings = map (value S) goals
-    val value_bindings = map extract_single_subject bindings
-    val variables = map extract_single_variable goals
-    val pairs = pairup (variables, value_bindings)
-    fun print_pairs (nil) = ()
-      | print_pairs ((v, b) :: rest) = (OutLine (v ^ " = " ^ (b)); print_pairs (rest))
+    val term_pairs = pairup (goals, bindings)
+
+    fun
+      print_list_bindings (nil, nil) = ()
+      | print_list_bindings (var :: vars, vall :: vals) = (
+        print_pair(var, vall);
+        print_list_bindings(vars, vals)
+      )
+    and print_pair (v, b) =
+      case (v, b) of
+        (Var (x, l), Fun (a, [])) => OutLine(x ^ " = " ^ a)
+        | (Fun (p, argsp), Fun (q, argsq)) => print_list_bindings (argsp, argsq)
+        | _ => ()
+    and print_pairs (nil) = ()
+      | print_pairs ((v, b) :: rest) = (print_pair (v, b); print_pairs (rest))
+        (* (OutLine ((PrintTerm v) ^ " = " ^ (PrintTerm b)); print_pairs (rest)) *)
   in
     (* OutLine(foldr op^  "" (map PrintTerm bindings)) *)
     (* (
       OutLine(foldr op^ "" (value_bindings));
       OutLine (foldr op^ "" (variables))
     ) *)
-    print_pairs (pairs)
+    print_pairs (term_pairs)
     (* OutLine((PrintTerm (List.hd args)) ^ " = " ^ (PrintTerm (extract_single_subject (value S' goal)))); *)
     (*
        collect variables from goals
@@ -210,8 +221,10 @@ fun Prolog (x as (Headed (Var _, _))) =
 
 fun t () = (
   Prolog (parse "init.");
-  Prolog (parse "p(a, b).");
-  Prolog (parse "p(X, Y)?")
+  Prolog (parse "p(a).");
+  Prolog (parse "q(a, b).");
+  Prolog (parse "p(X)?");
+  Prolog (parse "q(X, Y)?")
 )
 
 (* 
