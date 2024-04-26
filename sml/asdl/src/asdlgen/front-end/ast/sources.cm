@@ -1,0 +1,23 @@
+(* sources.cm
+ *
+ * COPYRIGHT (c) 2018 The Fellowship of SML/NJ (http://www.smlnj.org)
+ * All rights reserved.
+ *)
+
+Library
+
+  structure AST
+  structure PrimTypes
+
+is
+
+  $/basis.cm
+  $/smlnj-lib.cm
+
+  ../common/sources.cm
+  ../parser/sources.cm
+
+  ast.sml
+  ident-fn.sml
+  prim-types.sml
+

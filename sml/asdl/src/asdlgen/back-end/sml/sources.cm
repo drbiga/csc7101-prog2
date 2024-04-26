@@ -1,0 +1,30 @@
+(* sources.cm
+ *
+ * COPYRIGHT (c) 2018 The Fellowship of SML/NJ (http://www.smlnj.org)
+ * All rights reserved.
+ *)
+
+Library
+
+  structure GenSML
+
+is
+
+  $/basis.cm
+  $/smlnj-lib.cm
+  $/pp-lib.cm
+
+  ../../common/sources.cm
+  ../../front-end/sources.cm
+  ../util/sources.cm
+
+  fragments.sml		(* generated *)
+  gen-pickle-fn.sml
+  gen-pickle-sig.sml
+  gen-sexp-pickle.sml
+  gen-sml.sml
+  gen-types.sml
+  print-sml.sml
+  sml.sml
+  util.sml
+

@@ -1,0 +1,23 @@
+(* sources.cm
+ *
+ * COPYRIGHT (c) 2018 The Fellowship of SML/NJ (http://www.smlnj.org)
+ * All rights reserved.
+ *)
+
+Library
+
+  structure Encoding
+  structure SortDecls
+  structure StringSubst
+
+is
+
+  $/basis.cm
+  $/smlnj-lib.cm
+
+  ../../front-end/sources.cm
+
+  encoding.sml
+  sort-decls.sml
+  string-subst.sml
+

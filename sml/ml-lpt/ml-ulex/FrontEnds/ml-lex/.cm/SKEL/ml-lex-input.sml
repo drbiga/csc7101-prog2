@@ -1,0 +1,2 @@
+Skeleton 5
+d2f2d"Int"d"TextIO"ad"MLLexInput"jh3aä¢MLLexLrVals"jh1aä¢Token"gp2ä¢LrParser"ÿ7gp1e"MLLexLrValsFun"aä¢MLLexLex"jh1ad"Tok"gp2ÿ%d"Tokens"gp1e"MLLexLexFun"ad"MLLexParser"jh3aä¢ParserData"gp2ÿ%ÿ‚+ad"Lex"gp1ÿ$aÿgp1ÿgp1e"Join"gp1c"INPUT"

@@ -1,0 +1,23 @@
+(* sources.cm
+ *
+ * COPYRIGHT (c) 2018 The Fellowship of SML/NJ (http://www.smlnj.org)
+ * All rights reserved.
+ *)
+
+Library
+
+  structure Typecheck
+
+is
+
+  $/basis.cm
+  $/smlnj-lib.cm
+
+  ../common/sources.cm
+  ../parser/sources.cm
+  ../ast/sources.cm
+  ../views/sources.cm
+
+  env.sml
+  typecheck.sml
+

@@ -1,0 +1,14 @@
+A :- B1, B2, ..., Bn.
+
+Headed clause is a rule
+Headless clause is a bunch of things in a query
+    ? p(a), q(a), r(a)
+No other case where Headless happens
+Rule with bunch of things is also Headed
+    pq(X) :- p(X), q(X)
+Is Headed(Fun(pq, [X]), [Fun(p, [X]), Fun(q, [X])])
+
+A is the HEAD of the rule
+B-s are the literals
+
+A query is also a GOAL

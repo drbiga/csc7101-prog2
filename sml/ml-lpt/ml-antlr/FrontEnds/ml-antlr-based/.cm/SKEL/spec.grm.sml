@@ -1,0 +1,2 @@
+Skeleton 5
+d2aä¢SpecTokens"è0ae"SpecParseFn"i2aä¢Lex"gp1c"ANTLR_LEXER"f7ÿ$d"Atom"Cd"List"d"String"d"Substring"ä¢AntlrStreamPos"ä¢GrammarSyntax"Nh1bd4aä¢Tok"gp1ÿad"UserCode"h2ad"GS"gp1ÿ4ad"StreamPos"gp1ÿ#ad"Err"jh2aÿ‚gp1ÿ‚aÿ$gp1ÿ$gp1e"AntlrErrHandler"ad"EBNF"ÿf0

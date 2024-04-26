@@ -1,0 +1,2 @@
+Skeleton 5
+d2f7d"List"d"UTF8"Cd"Word"ä¢IntInf"d"String"d"TextIO"ä¢Vector"Cd"LargeReal"d"StringCvt"d"Substring"ä¢ULexBuffer"ä¢AntlrStreamPos"Nad"JSONLexer"h2aä¢UserDeclarations"h1aä¢T"gp1d"JSONTokens"bbd2egp1ÿ‚f6ÿ‚(Cÿÿ5ÿ#ÿ0ÿ‚Nf0f3ÿ#ÿ0ÿ‚

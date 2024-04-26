@@ -1,0 +1,2 @@
+Skeleton 5
+ae"mkMakeLrTable"i3aдҐIntGrammar"gp1c"INTGRAMMAR"aдҐLrTable"gp1c"LR_TABLE"f2d"Int"дҐArray"jh7aдҐCore"jи±б€зр±€gp1e"mkCore"aдҐCoreUtils"jh2€Б(б€Бзр±€Бgp1e"mkCoreUtils"CaдҐGraph"jh3€Б(€Вa€Б=gp1€Б=gp1e"mkGraph"aдҐLook"j€Б&gp1e"mkLook"aдҐLalr"jh4€Б(€Вa€В,gp1€В,a€Гgp1€Гgp1e"mkLalr"б€2зр±€2€Б(CaдҐGrammar"gp2€€Д*aдҐGotoList"jh0gp1e"ListOrdSet"aдҐErrs"jh1€Дgp1c"LR_ERRS"c5Ce€Б+egp1€Д*egp1€Еe€Д e€ВNf8€Б€Г-d"List"C€Г€Б€В,d"TextIO"€Д=NNgp1c"MAKE_LR_TABLE"

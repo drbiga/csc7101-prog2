@@ -1,0 +1,2 @@
+Skeleton 5
+d2f5Cd"Char"d"List"d"String"d"Vector"d"Options"Nad"RegExp"jh6ad"W"gp1d"Word"Caä¢Sym"è0aä¢SymSet"jgp1ÿgp1e"IntervalSetFn"ad"SIS"gp1ÿad"Map"jÿgp1e"RedBlackMapFn"ad"SISSet"jÿgp1e"RedBlackSetFn"Ngp1c"REG_EXP"

@@ -1,0 +1,230 @@
+%!TEX root = manual.tex
+%
+\chapter{Code Interface}
+\label{chap:code-interface}
+
+In this section, we describe the default translation of ASDL definitions to target
+languages and describe some of the runtime assumptions that users need to be aware of
+when using the generated code.
+
+\section{Translation to \sml{}}
+
+The translation from an \asdl{} specification to \sml{} code is straightforward.
+\asdl{} modules map to \sml{} structures, \asdl{} product types map to either tuples or records,
+and \asdl{} sum types map the \sml{} datatypes.
+\tblref{tbl:asdl-to-sml} summarizes this translation.
+If an \asdl{} identifier conflicts with an \sml{} keyword or pervasive identifier, then the translation
+adds a trailing prime character (\lstinline[language=SML]!'!) to the identifier.
+
+For an \asdl{} module \lstinline[mathescape=true]@$M$@, we generate an \sml{} signature
+and several \sml{} structures:
+\begin{code}\begin{lstlisting}[language=SML,mathescape=true]
+structure $M$ = struct ... end
+signature $M$_PICKLE = sig ... end
+structure $M$MemoryPickle : $M$_PICKLE = struct ... end
+structure $M$FilePickle : $M$_PICKLE = struct ... end
+structure $M$SExpPickle : $M$_PICKLE = struct ... end (* optional *)
+\end{lstlisting}\end{code}%
+where \lstinline[language=SML,mathescape=true]@$M$@ structure contains the type definitions
+for the \asdl{} specification,
+\lstinline[language=SML,mathescape=true]@$M$MemoryPickle@ structure
+implements functions to convert between the types and byte vectors, and the
+\lstinline[language=SML,mathescape=true]@$M$FilePickle@ structure implements functions to
+read and write pickles from binary files.
+The optional \lstinline[language=SML,mathescape=true]@$M$SExpPickle@ structure implements
+functions to  read and write textual pickles in S-Expression syntax.\footnote{
+  Currently, only output of S-Expression pickles is implemented.
+}
+This module is generated when the ``\texttt{--sexp}'' option is specified
+(see see \secref{sec:s-expressions} for more details).
+
+For an \asdl{} source file \texttt{f.asdl}, \asdlgen{} will produce four \sml{} source files.
+\begin{description}
+  \item[\normalfont\texttt{f.sml}] \mbox{}\\
+    contains type definition structures (\eg{},
+    \lstinline[mathescape=true]@structure $M$@)
+  \item[\normalfont\texttt{f-pickle.sig}] \mbox{}\\
+    contains memory-pickler signatures (\eg{},
+    \lstinline[mathescape=true]@signature $M$_PICKLE@)
+  \item[\normalfont\texttt{f-memory-pickle.sml}] \mbox{}\\
+    contains memory-pickler structures (\eg{},
+    \lstinline[mathescape=true]@structure $M$MemoryPickle@)
+  \item[\normalfont\texttt{f-file-pickle.sml}] \mbox{}\\
+    contains file-pickler structures (\eg{},
+    \lstinline[mathescape=true]@structure $M$FilePickle@)
+  \item[\normalfont\texttt{f-sexp-pickle.sml}] \mbox{}\\
+    contains the optional S-Expression pickler structures (\eg{},
+    \lstinline[mathescape=true]@structure $M$SExpPickle@).
+    This file is only generated when the ``\texttt{--sexp}''
+    command-line option is specified.
+\end{description}%
+
+\begin{table}[tp]
+  \caption{Translation of \asdl{} types to \sml{}}
+  \label{tbl:asdl-to-sml}
+  \begin{center}
+    \begin{tabular}{|l|p{3in}|}
+      \hline
+      \textbf{\asdl{} type} & \textbf{\sml{} type} \\
+      \hline
+      \textit{Named types ($T$)} &  ($\hat{T}$) \\[0.25em]
+      \lstinline!bool! & \lstinline[language=SML]!bool! \\[0.5em]
+      \lstinline!int! & \lstinline[language=SML]!int! \\[0.5em]
+      \lstinline!uint! & \lstinline[language=SML]!word! \\[0.5em]
+      \lstinline!integer! & \lstinline[language=SML]!IntInf.int! \\[0.5em]
+      \lstinline!string! & \lstinline[language=SML]!string! \\[0.5em]
+      \lstinline!identifier! & \lstinline[language=SML]!Atom.atom! \\[0.5em]
+      \lstinline[language=ASDL,mathescape=true]@$t$@ & \lstinline[language=SML,mathescape=true]!$t$! \\[0.5em]
+      \lstinline[language=ASDL,mathescape=true]@$M$.$t$@ & \lstinline[language=SML,mathescape=true]!$M$.$t$! \\[0.5em]
+      \hline
+      \textit{Type expressions ($\tau$)} &  ($\hat{\tau}$) \\[0.25em]
+      \lstinline[language=ASDL,mathescape=true]@$T$@ & \lstinline[language=SML,mathescape=true]!$\hat{T}$! \\[0.5em]
+      \lstinline[language=ASDL,mathescape=true]@$T$?@ & \lstinline[language=SML,mathescape=true]!$\hat{T}$ option! \\[0.5em]
+      \lstinline[language=ASDL,mathescape=true]@$T$*@ & \lstinline[language=SML,mathescape=true]!$\hat{T}$ list! \\[0.5em]
+      \hline
+      \textit{Product types ($\rho$)} & ($\hat{\rho}$) \\[0.25em]
+      \lstinline[language=ASDL,mathescape=true]@($\tau_1$, $\ldots$, $\tau_n$)@
+        & \lstinline[language=SML,mathescape=true]!$\hat{\tau}_1$ * $\cdots$ * $\hat{\tau}_n$! \\[0.5em]
+      \lstinline[language=ASDL,mathescape=true]@($\tau_1$ $f_1$, $\ldots$, $\tau_n$ $f_n$)@
+        & \lstinline[language=SML,mathescape=true]!{$f_1$ : $\hat{\tau}_1$, $\ldots$, $f_n$ : $\hat{\tau}_n$}! \\[0.5em]
+      \hline
+      \textit{Type definitions} & \\[0.25em]
+      \lstinline[language=ASDL,mathescape=true]@$t$ = $\rho$@
+        & \lstinline[language=SML,mathescape=true]!type $t$ = $\hat{\rho}$! \\[0.5em]
+      \lstinline[language=ASDL,mathescape=true]@$t$ = $C_1$ | $\cdots$ | $C_n$@
+        & \lstinline[language=SML,mathescape=true]!datatype $t$ = $C_1$ | $\cdots$ | $C_n$! \\[0.5em]
+      \lstinline[language=ASDL,mathescape=true]@$t$ = $C_1$($\rho_1$) | $\cdots$ | $C_n$($\rho_n$)@
+        & \lstinline[language=SML,mathescape=true]!datatype $t$ = $C_1$ of $\hat{\rho}_1$ | $\cdots$ | $C_n$ of $\hat{\rho}_n$! \\[0.25em]
+      \hline
+    \end{tabular}%
+  \end{center}%
+\end{table}%
+
+\subsection{CM support}
+The SML/NJ Compilation Manager (CM) knows about ASDL files (as of version 110.84).
+If one specifies ``\texttt{foo.asdl}'' in the file list of a \texttt{.cm} file, CM will
+infer the generation of the five \sml{} files as described above.
+
+\section{Translation to \Cplusplus{}}
+
+The translation of an \asdl{} specification to \Cplusplus{} is more complicated than for \sml{}.
+For each \asdl{} module, we define a corresponding \Cplusplus{} namespace.
+
+\begin{table}[tp]
+  \caption{Translation of \asdl{} types to \Cplusplus{}}
+  \label{tbl:asdl-to-cxx}
+  \begin{center}
+    \begin{tabular}{|p{2in}|p{3in}|}
+      \hline
+      \textbf{ASDL type} & \textbf{\Cplusplus{} type} \\
+      \hline
+      \textit{Named types ($T$)} &  ($\hat{T}$) \\[0.25em]
+      \lstinline!bool! & \lstinline[language=c++]!bool! \\[0.5em]
+      \lstinline!int! & \lstinline[language=c++]!int! \\[0.5em]
+      \lstinline!uint! & \lstinline[language=c++]!unsigned int! \\[0.5em]
+      \lstinline!integer! & \lstinline[language=c++]!asdl::integer! \\[0.5em]
+      \lstinline!string! & \lstinline[language=c++]!std::string! \\[0.5em]
+      \lstinline!identifier! & \lstinline[language=c++]!asdl::identifier! \\[0.5em]
+      \lstinline[language=ASDL,mathescape=true]@$t$@ &
+        $\left\{
+        \begin{array}{ll}
+          t & \text{if $t$ is an \lstinline[language=c++]!enum! type} \\
+          \text{\lstinline[language=c++,mathescape=true]@$t$ *@} & otherwise \\
+        \end{array}
+        \right.$ \\[0.5em]
+      \lstinline[language=ASDL,mathescape=true]@$M$.$t$@ & \lstinline[language=c++,mathescape=true]@$M$::$t$@ \\[0.5em]
+      \hline
+      \textit{Type expressions ($\tau$)} &  ($\hat{\tau}$) \\[0.25em]
+      \lstinline[language=ASDL,mathescape=true]@$T$@ & \lstinline[language=c++,mathescape=true]@$\hat{T}$@ \\[0.5em]
+      \lstinline[language=ASDL,mathescape=true]@$T$?@ & \lstinline[language=c++,mathescape=true]@asdl::option< $\hat{T}$ >@ \\[0.5em]
+      \lstinline[language=ASDL,mathescape=true]@$T$*@ & \lstinline[language=c++,mathescape=true]@std::vector< $\hat{T}$ >@ \\[0.5em]
+      \hline
+      \textit{Product types ($\rho$)} & ($\hat{\rho}$) \\[0.25em]
+      \lstinline[language=ASDL,mathescape=true]@($\tau_1$, $\ldots$, $\tau_n$)@
+        & \lstinline[language=c++,mathescape=true]@$\hat{\tau}_1$ _v1; $\ldots$ $\hat{\tau}_n$ _vn@ \\[0.5em]
+      \lstinline[language=ASDL,mathescape=true]@($\tau_1$ $f_1$, $\ldots$, $\tau_n$ $f_n$)@
+        & \lstinline[language=c++,mathescape=true]@$\hat{\tau}_1$ _$f_1$; $\ldots$ $\hat{\tau}_n$ _$f_n$@ \\[0.5em]
+      \hline
+      \textit{Type definitions} & \\[0.25em]
+      \lstinline[language=ASDL,mathescape=true]@$t$ = $\rho$@
+        & \lstinline[language=c++,mathescape=true]@struct $t$ { $\hat{\rho}$ };@ \\[0.5em]
+      \lstinline[language=ASDL,mathescape=true]@$t$ = $C_1$ | $\cdots$ | $C_n$@
+        & \lstinline[language=c++,mathescape=true]@class enum $t$ { $C_1$, $\ldots$, $C_n$ };@ \\[0.5em]
+      \lstinline[language=ASDL,mathescape=true]@$t$ = $C_1$($\rho_1$) | $\cdots$ | $C_n$($\rho_n$)@
+        &
+\vspace*{-1em}
+\begin{lstlisting}[language=c++,mathescape=true]
+class $t$ { $\cdots$ };
+class $C_1$ : public $t$ {
+  private: $\hat{\rho}_1$
+  $\cdots$
+};
+$\cdots$
+class $C_n$ : public $t$ {
+  private: $\hat{\rho}_n$
+  $\cdots$
+};
+\end{lstlisting}%
+      \\[0.25em]
+      \hline
+    \end{tabular}%
+  \end{center}%
+\end{table}%
+
+\subsection{Memory management}
+
+
+\section{The Rosetta Stone for Sum Types}
+\label{sec:rosetta-stone}
+
+For languages that support algebraic data types, \asdlgen{} maps sum types directly
+to the language's mechanism (\eg{}, \lstinline[language=SML]!datatype! declarations
+in \sml{}).
+For class-based object-oriented languages, like \Cplusplus{}, \asdlgen{} maps
+sum types to abstract base classes and the constructors to individual subclasses.
+The previous example written in \sml{} would be
+\begin{quote}\begin{lstlisting}[language=SML]
+structure M =
+  struct
+    datatype sexpr
+      = Int of (int)
+      | String of (string)
+      | Symbol of (identifier)
+      | Cons of (sexpr * sexpr)
+      | Nil
+  end
+\end{lstlisting}\end{quote}%
+and in \Cplusplus{} it translates to
+\begin{quote}\begin{lstlisting}[language=c++]
+namespace M {
+
+    struct sexpr {
+        enum tag {
+            _Int, _String, _Symbol, _Cons, _Nil
+        };
+        tag _tag;
+        sexpr (tag t) : _tag(t) { }
+        virtual ~sexpr ();
+    };
+
+    struct Int : public sexpr {
+        int _v1;
+        Int (int v) : sexpr(sexpr::_Int), _v1(v) { }
+        ~Int () { }
+    };
+
+    struct String : public sexpr {
+        std::string _v1;
+        String (const char *v) : sexpr(sexpr::_String), _v1(v) { }
+        String (std::string const &v) : sexpr(sexpr::_String), _v1(v) { }
+        ~String () { }
+    };
+
+    struct Symbol : public sexpr { ... };
+
+    struct Cons : public sexpr { ... };
+
+    struct Nil : public sexpr { ... };
+
+}
+\end{lstlisting}\end{quote}%

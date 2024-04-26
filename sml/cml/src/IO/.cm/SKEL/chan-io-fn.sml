@@ -1,0 +1,2 @@
+Skeleton 5
+ae"ChanIOFn"i6бдўPrimIO"зр±гўPRIM_IO"CaдўV"gp1c"MONO_VECTOR"aдўVS"gp1c"MONO_VECTOR_SLICE"aдўA"gp1c"MONO_ARRAY"aдўAS"gp1c"MONO_ARRAY_SLICE"f8яЃя'яЃ/Cd"IO"я=d"CML"d"General"d"Mailbox"NNjh2ad"SV"gp1d"SyncVar"aяgp1яh1я

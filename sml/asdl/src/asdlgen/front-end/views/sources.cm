@@ -1,0 +1,29 @@
+(* sources.cm
+ *
+ * COPYRIGHT (c) 2018 The Fellowship of SML/NJ (http://www.smlnj.org)
+ * All rights reserved.
+ *)
+
+Library
+
+  structure View
+  structure SMLView
+  structure CxxView
+
+is
+
+  $/basis.cm
+  $/smlnj-lib.cm
+
+  ../common/sources.cm
+  ../parser/sources.cm
+  ../ast/sources.cm
+
+  common-view.sml
+  cxx-view.sml
+  prop-names.sml
+  sml-view.sml
+  view.sml
+  view-base-fn.sml
+  view-base-sig.sml
+

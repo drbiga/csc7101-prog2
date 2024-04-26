@@ -1,0 +1,42 @@
+/* config/config_h.in.  Generated from configure.ac by autoheader.  */
+
+
+/*
+ * This code is part of the SML/NJ System (http://smlnj.org)
+ *
+ * COPYRIGHT (c) 2018 The Fellowship of SML/NJ.
+ */
+
+#ifndef _ASDL_CONFIG_H_
+#define _ASDL_CONFIG_H_
+
+
+
+/* Define to 1 to use the GNU Multiprecision Library. */
+#undef ASDL_USE_GNU_MP
+
+/* define if the compiler supports basic C++11 syntax */
+#undef HAVE_CXX11
+
+/* Define to the address where bug reports for this package should be sent. */
+#undef PACKAGE_BUGREPORT
+
+/* Define to the full name of this package. */
+#undef PACKAGE_NAME
+
+/* Define to the full name and version of this package. */
+#undef PACKAGE_STRING
+
+/* Define to the one symbol short name of this package. */
+#undef PACKAGE_TARNAME
+
+/* Define to the home page for this package. */
+#undef PACKAGE_URL
+
+/* Define to the version of this package. */
+#undef PACKAGE_VERSION
+
+
+
+#endif /* !_ASDL_CONFIG_H_ */
+

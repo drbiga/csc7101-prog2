@@ -1,0 +1,2 @@
+Skeleton 5
+bd5CaдўModuleId"ки0зр±еўIdentFn"aдўTypeId"яaдўConstrId"яad"ViewId"яaеўAddDefPropFn"i1aдўId"gp1c"IDENTIFIER"h1езр±яЃNd2f3я!я-яad"AST"h3aяjh1aяЃgp1язр±яЃaя!h1baяЃjh1aяЃgp1я!я‚яЃ0aя-jh1aяЃgp1я-я‚

@@ -1,0 +1,2 @@
+Skeleton 5
+d2f6ä¢IO"Cd"Event"ä¢Posix"d"TextIO"d"Signals"d"PosixTextPrimIO"Nad"Unix"jh7ad"S"gp1d"Scheduler"ad"PM"gp1d"ProcManager"Cad"PP"gp2ÿd"Process"ad"PE"gp2ÿd"ProcEnv"ad"PF"gp2ÿd"FileSys"ad"PIO"gp2ÿÿad"SS"gp1d"Substring"Ngp1c"UNIX"

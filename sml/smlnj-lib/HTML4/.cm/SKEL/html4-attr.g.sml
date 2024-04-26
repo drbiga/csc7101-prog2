@@ -1,0 +1,2 @@
+Skeleton 5
+d3f1ä¢Atom"aä¢HTML4AttrTokens"è0ae"HTML4AttrParseFn"i2aä¢Lex"gp1c"ANTLR_LEXER"f4ÿ7ÿd"List"d"String"h1bd4aä¢Tok"gp1ÿad"UserCode"ÿad"Err"jh2aÿ*gp1ÿ*aÿ7gp1ÿ7gp1e"AntlrErrHandler"ad"EBNF"ÿf0

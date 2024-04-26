@@ -1,0 +1,28 @@
+(* asdl-lib.cm
+ *
+ * COPYRIGHT (c) 2019 The Fellowship of SML/NJ (http://www.smlnj.org)
+ * All rights reserved.
+ *)
+
+Library
+
+  signature ASDL
+  signature ASDL_PICKLE
+
+  structure ASDL
+  structure ASDLMemoryPickle
+  structure ASDLFilePickle
+  structure ASDLSExpPickle
+
+is
+
+  $/basis.cm
+  $/smlnj-lib.cm
+  $/pp-lib.cm		(* for S-Expression printing *)
+
+  asdl.sig
+  asdl.sml
+  asdl-pickle.sig
+  asdl-memory-pickle.sml
+  asdl-file-pickle.sml
+  asdl-sexp-pickle.sml

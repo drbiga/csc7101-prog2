@@ -1,0 +1,2 @@
+Skeleton 5
+d2f±дўSparcInstrExt"ae"SparcCCallFn"i2aдўT"gp1c"MLTREE"f3d"List"d"CLocKind"d"SparcCSizes"jh8бя'зр±я'ad"Ty"зр±дўCType"aдўC"gp1d"SparcCells"Cad"IX"gpяad"CTy"яЃ*aдўSA"jh0gp1e"StagedAllocationFn"ad"Gen"jh3яЃaяЃ6gp1яЃ6бя‚ зр±я‚ gp1e"CCallGenFn"ad"CCs"jh1яѓgp1e"SparcCConventionFn"Ngp1c"C_CALL"

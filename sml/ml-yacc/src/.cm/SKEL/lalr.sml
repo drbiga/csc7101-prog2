@@ -1,0 +1,2 @@
+Skeleton 5
+ae"mkLalr"i5CaдўIntGrammar"gp1c"INTGRAMMAR"aдўCore"gp1c"CORE"aдўGraph"gp1c"LRGRAPH"aдўLook"gp1c"LOOK"f1дўArray"Njh9c5CeзрІядўGrammar"eзр±яeзр±я,eзр±я>egp1яЃNf4d"Int"d"List"яЃяЃ'aя>я‚aя,я‚CaяЃ<яЃ7aяя‚ad"ItemList"ки0зр±еўListOrdSet"ad"NontermSet"яѓad"NTL"jяѓgp1e"RbOrdSet"Ngp1c"LALR_GRAPH"

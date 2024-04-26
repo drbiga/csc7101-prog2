@@ -1,0 +1,2 @@
+Skeleton 5
+d2f5Cd"Error"d"TextIO"ä¢LrParser"d"TypeDefs"d"SourceMap"Nad"Parser"jh4aä¢LrVals"jh1aä¢Token"gp2ÿÿgp1e"LrValsFun"aä¢TokTable"jh1áä¢Tokens"çğ²ÿÿ‚gp1e"TokenTable"aä¢CLex"jh2ÿ‚aÿ4gp1ÿ4gp1e"CLexFun"ad"P"jh3aä¢ParserData"gp2ÿÿƒad"Lex"gp1ÿ‚&aÿgp1ÿgp1e"JoinWithArg"gp1c"PARSER"

@@ -1,0 +1,32 @@
+(* sources.cm
+ *
+ * COPYRIGHT (c) 2018 The Fellowship of SML/NJ (http://www.smlnj.org)
+ * All rights reserved.
+ *
+ * Sources for asdlgen front end.
+ *)
+
+Library
+
+  structure AST
+  structure FrontEnd
+  structure PrimTypes
+
+(* views *)
+  structure CxxView
+  structure SMLView
+
+is
+
+  $/basis.cm
+  $/smlnj-lib.cm
+  $/pp-lib.cm
+
+  ast/sources.cm
+  common/sources.cm
+  parser/sources.cm
+  typechecker/sources.cm
+  views/sources.cm
+
+  front-end.sml
+

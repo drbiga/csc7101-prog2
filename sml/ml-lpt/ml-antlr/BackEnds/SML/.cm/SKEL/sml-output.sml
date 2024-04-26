@@ -1,0 +1,2 @@
+Skeleton 5
+d2f7d"ML"d"Atom"Cd"Item"d"List"d"Prod"ä¢Token"d"Action"Cd"String"d"TextIO"d"AtomSet"ä¢Nonterm"d"Options"Cä¢Predict"d"ListPair"d"TextIOPP"d"ExpandFile"d"SMLTemplate"Nad"SMLOutput"h6ad"S"gp1d"LLKSpec"Cad"P"gp1ÿ)ad"TMap"gp2ÿ&ä¢Map"ad"TSet"gp2ÿ&d"Set"ad"NMap"gp2ÿÿƒad"NT"gp1ÿN

@@ -1,0 +1,13 @@
+# fragments.gmk
+#
+# COPYRIGHT (c) 2018 The Fellowship of SML/NJ (https://smlnj.org)
+# All rights reserved.
+#
+# !!! THIS FILE WAS GENERATED; DO NOT EDIT !!!
+#
+
+back-end/sml/fragments.sml: \
+    back-end/sml/fragments/CATALOG \
+    back-end/sml/fragments/pickle-util.in \
+    back-end/sml/fragments/sexp-util.in \
+    back-end/sml/fragments/streams.in

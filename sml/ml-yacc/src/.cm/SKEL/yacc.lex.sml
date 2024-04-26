@@ -1,0 +1,2 @@
+Skeleton 5
+d2f1d"Header"ae"LexMLYACC"i3aä¢Tokens"gp1c"Mlyacc_TOKENS"aä¢Hdr"gp1c"HEADER"f4ÿ:d"Char"ä¢TextIO"ä¢Vector"jh3aä¢yyInput"jh3aä¢TIO"gp1ÿad"TSIO"gp2ÿ;d"StreamIO"ad"TPIO"gp1d"TextPrimIO"h0aä¢UserDeclarations"h3aÿçğ±ÿeÿƒf1ÿ:bbd2egp1ÿ‚;f5Cd"IO"ÿ:ÿ ÿ-ÿ‚;Nf0f1ÿ-gp1c"ARG_LEXER"
