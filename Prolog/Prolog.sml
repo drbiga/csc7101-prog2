@@ -25,11 +25,9 @@ fun value S (Var v)         = S v
 (* How to construct substitutions? *)
 (* - Have a compose function *)
 
-fun comp (S, R) v = value S (R v)
 
 (* Update function *)
 (* Assign a new variable binding to an existing substitution *)
-fun upd (v, t) S = comp (fn w => if w = v then t else Var w, S)
 
 fun upd (v, t) S w = if w = v then t else S w
 
@@ -50,29 +48,37 @@ fun
   | pairup (a::b, c::d)     = (a, c) :: pairup(b, d)
   | pairup (_)              = raise length_exception
 
-fun
-  occurs v (Var w) = (v = w)
-  | occurs v (Fun (w, args)) = List.exists (occurs v) args
+fun print_var  (x, l) = "Var(" ^ x ^ ", " ^ Int.toString(l) ^ ")"
 
-fun unify' ((t1, t2), S) =
+fun
+  occurs v (Var w) = (
+    (* OutLine ("Checking occurs " ^ print_var v ^ " in " ^ print_var w); *)
+    (v = w)
+  )
+  | occurs v (Fun (w, args)) = (
+    (* OutLine ("Calling occurs recursively"); *)
+    foldr (fn (x, acc) => x orelse acc) false (map (occurs v) args)
+  )
+
+fun unify' ((goal_term, rule_term), S) =
   let
-    val t1' = top S t1;
-    val t2' = top S t2;
+    val goal_term' = top S goal_term;
+    val rule_term' = top S rule_term;
   in
-    case (t1', t2') of
-      (Var v, Var w) => if v = w then S else upd(v, t2') S
-      | (Var v, _) => if occurs v t2 then raise occurs_check_exception else upd(v, t2') S
-      | (_, Var w) => if occurs w t1 then raise occurs_check_exception else upd(w, t1') S
+    case (goal_term', rule_term') of
+      (Var goal_var, Var rule_var) => if goal_var = rule_var then S else upd(goal_var, rule_term') S
+      | (Var goal_var, _) => if occurs goal_var rule_term then raise occurs_check_exception else upd(goal_var, rule_term') S
+      | (_, Var rule_var) => if occurs rule_var goal_term then raise occurs_check_exception else upd(rule_var, goal_term') S
       | (Fun (f1, fargs1), Fun (f2, fargs2)) =>
           if f1 = f2 then foldr unify' S (pairup (fargs1, fargs2))
           else raise non_unifiable_exception
   end
 
-fun unify (t1, t2) =
-    unify' ((t1, t2), empty)
+fun unify (goal_term, rule_term) =
+    unify' ((goal_term, rule_term), empty)
     handle
       length_exception => raise non_unifiable_exception  
-      | occors => raise non_unifiable_exception
+      | occurs_check_exception => raise non_unifiable_exception
 
 
 (* ================================================================================= *)
@@ -86,49 +92,6 @@ exception unsolvable_exception
 fun rename l (Var (x, _)) = Var (x, l)
   | rename l (Fun (f, args)) = Fun (f, map (rename l) args)
 
-fun incl (Var (x, l)) = rename (l+1) (Var (x, l))
-
-fun print_goal (goal: Term) =
-  let
-    fun
-      print_term (Var (id, level)) = print (id ^ Int.toString(level))
-      | print_term (Fun (p, args)) =
-          if length args > 0 then (print p; print "("; print_list args; print ")")
-          else (print p)
-    and
-      print_list (nil) = ()
-      | print_list (head :: tail) = (print_term head; print_list tail)
-  in
-    print_term (goal)
-  end
-
-fun
-  term_lists_are_equal (nil, nil) = true
-  | term_lists_are_equal (h1 :: t1, h2 :: t2) = terms_are_equal (h1, h2) andalso term_lists_are_equal (t1, t2)
-and
-  terms_are_equal (Var (x, level_x), Var (y, level_y)) =
-    if x = y andalso level_x = level_y then true
-    else false
-  | terms_are_equal (Fun (p, args_p), Fun (q, args_q)) =
-    if p = q andalso term_lists_are_equal (args_p, args_q) then true
-    else false
-  | terms_are_equal (Var _, Fun _) = false
-  | terms_are_equal (Fun _, Var _) = false
-
-fun
-  extract_variables (nil) = nil
-  | extract_variables (goal :: goals) =
-    case goal of
-      Var (x, l) => x :: extract_variables (goals)
-      | Fun (p, args) => extract_variables (goals)
-
-fun extract_single_variable (Var (x, l)) = x
-  | extract_single_variable (Fun (p, args)) = extract_single_variable (List.hd args)
-
-exception subject_not_found_exception
-
-fun extract_single_subject (Var (x, l)) = raise subject_not_found_exception
-  | extract_single_subject (Fun (p, args)) = case (List.hd args) of Fun (p', args) => p' | _ => ""
 
 fun Solve (goals: Term list, db: HornClause list) =
   let
@@ -137,30 +100,44 @@ fun Solve (goals: Term list, db: HornClause list) =
       | solve (_, Headless _ :: _, _, _) = empty (* this can never happen *)
       | solve (goal :: goals, Headed (h, args) :: rules, level, S) =
         let
+          val _ = (
+            (* OutLine ("-----------------------------------------------------------------------------------");
+            OutLine ("Goals: " ^ PrintTerm goal ^ foldr (fn (x, acc) => acc ^ ", " ^ x) "" (map PrintTerm goals));
+            OutLine ("Rules: " ^ PrintClause (Headed(h, args)) ^ foldr (fn (x, acc) => acc ^ ", " ^ x) "" (map PrintClause rules));
+            OutLine ("Unifying " ^ PrintTerm goal ^ " with " ^ PrintTerm h);
+            OutLine ("-----------------------------------------------------------------------------------") *)
+          )
           val h' = rename (level + 1) h
-          val S' = unify' ((goal, h), S)
-            handle non_unifiable_exception => (OutLine ("Unification exception"); solve (goal :: goals, rules, level, S))
+          val S' = unify' ((goal, h'), S)
+            (* handle non_unifiable_exception => (OutLine ("Unification exception"); solve (goal :: goals, rules, level, S)) *)
+            handle non_unifiable_exception => solve (goal :: goals, rules, level, S)
+          (* val S' = unify (goal, h')
+            handle non_unifiable_exception => (OutLine ("Unification exception"); solve (goal :: goals, rules, level, S)) *)
+          (* val  *)
+          val args_level = map (rename (level + 1)) args
+          val goals_level = map (rename (level + 1)) goals
         in
-          case goal of
-            Var (x, l) => (
-              OutLine (
-                "Found viable substitution: " ^ PrintTerm (top S' (Var (x, l)))
-              );
-              S'
-            )
-            | Fun (p, args) => (
-              S'
-            )
+          (
+            (* Check if there isn't already some *)
+            (* if not occurs (top S' goal) args solve (map (value S') (goals @ args), db, level, S') *)
+            (* OutLine("Substitution performed:" ^ PrintTerm goal ^ " " ^ PrintTerm (value S' goal)); *)
+            solve (map (value S') (args_level @ goals_level), db, level+1, S')
+              handle unsolvable_exception => (OutLine ("Backtracking should be here"); S')
+            (* if false
+              then solve (goal :: goals, rules, level, S)
+              else solve (map (value S') (args_level @ goals), db, level+1, S')
+                    handle unsolvable_exception => (OutLine ("Backtracking should be here"); S') *)
+          )
         end
       
       (* val h' = rename level h
 	    val S' = unify (goal, h) handle 
 	      if unification succeeds
             t' = map (rename l) t
-	    apply S' to t', goals
-	    solve tail and rest of goals
-	    else try next rule in db
-	    else ... *)
+          apply S' to t', goals
+          solve tail and rest of goals
+        else try next rule in db
+        else ... *)
      
   in
     solve (goals, db, 1, empty)
@@ -169,10 +146,15 @@ fun Solve (goals: Term list, db: HornClause list) =
 
 (* Printing *)
 
+fun build_string (nil) = ""
+ | build_string (string :: string_list) = if length string_list > 0 then string ^ ", " ^ build_string (string_list) else string
+
+
 fun OutQuery (goals: Term list, db: HornClause list) =
   let
     val S = Solve (goals, db)
     val bindings = map (value S) goals
+    val bindings = map (value S) bindings
     val term_pairs = pairup (goals, bindings)
 
     fun
@@ -183,20 +165,21 @@ fun OutQuery (goals: Term list, db: HornClause list) =
       )
     and print_pair (v, b) =
       case (v, b) of
-        (Var (x, l), Fun (a, [])) => OutLine(x ^ " = " ^ a)
+        (Var x, Var y) => if x = y
+          then OutLine ("Equal Vars: " ^ (print_var x) ^ "=" ^ (print_var y))
+          else OutLine ("Different Vars: " ^ (print_var x) ^ "!=" ^ (print_var y))
+        | (Var (x, l), Fun (a, [])) => OutLine(x ^ " = " ^ a)
         | (Fun (p, argsp), Fun (q, argsq)) => print_list_bindings (argsp, argsq)
-        | _ => ()
+        | _ => (OutLine ("print pair error: " ^ build_string (map PrintTerm [v, b])); ())
     and print_pairs (nil) = ()
       | print_pairs ((v, b) :: rest) = (print_pair (v, b); print_pairs (rest))
-        (* (OutLine ((PrintTerm v) ^ " = " ^ (PrintTerm b)); print_pairs (rest)) *)
   in
-    (* OutLine(foldr op^  "" (map PrintTerm bindings)) *)
-    (* (
-      OutLine(foldr op^ "" (value_bindings));
-      OutLine (foldr op^ "" (variables))
-    ) *)
-    print_pairs (term_pairs)
-    (* OutLine((PrintTerm (List.hd args)) ^ " = " ^ (PrintTerm (extract_single_subject (value S' goal)))); *)
+    (
+      OutLine ("solution:");
+      (* OutLine (build_string (map PrintTerm goals)); *)
+      (* OutLine (build_string (map PrintTerm bindings)); *)
+      print_pairs (term_pairs)
+    )
     (*
        collect variables from goals
        reverse list of variable
@@ -220,11 +203,19 @@ fun Prolog (x as (Headed (Var _, _))) =
     )
 
 fun t () = (
+  OutLine ("===================================================================================");
   Prolog (parse "init.");
   Prolog (parse "p(a).");
-  Prolog (parse "q(a, b).");
   Prolog (parse "p(X)?");
-  Prolog (parse "q(X, Y)?")
+  OutLine ("===================================================================================");
+  Prolog (parse "init.");
+  Prolog (parse "q(a, b).");
+  Prolog (parse "q(X, Y)?");
+  OutLine ("===================================================================================");
+  Prolog (parse "init.");
+  Prolog (parse "parent(matheus, walter).");
+  Prolog (parse "son(X, Y) :- parent(Y, X).");
+  Prolog (parse "son(walter, X)?")
 )
 
 (* 
